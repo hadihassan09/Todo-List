@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import generateUID from "./functions"
+import generateUID from "../js/functions"
  export default class TodoList extends Component{
     constructor(props) {
         super(props);
