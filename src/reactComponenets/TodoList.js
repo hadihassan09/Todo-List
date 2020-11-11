@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import generateUID from "./functions"
  export default class TodoList extends Component{
     constructor(props) {
         super(props);
@@ -39,8 +39,8 @@ import React, { Component } from "react";
     
     render() {
         return (
-            <div style={ {margin: 20} }>
-                <div>
+            <div style={ {margin: 20} } className="w-25">
+                <div style={{ textAlign: 'center' }}>
                     <h3>{this.props.title}</h3>
                 </div>
                 <div>
@@ -52,23 +52,17 @@ import React, { Component } from "react";
                         }
                     </ul>
                 </div>
-                <div class="w-25">
+                <div>
                     <form onSubmit={this.handleSubmit}>
-                        <div class="form-group">
-                            <input class="form-control" placeholder="Add A New Task" type="text"  value={this.state.value} onChange={this.handleChange} />
+                        <div className="form-group">
+                            <input className="form-control" placeholder="Add A New Task" type="text"  value={this.state.value} onChange={this.handleChange} />
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-submit btn-block">Submit</button>
+                        <div className="form-group">
+                            <button className="btn btn-primary btn-submit btn-block">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         );
     }
-}
-
-
-function generateUID(length)
-{
-    return window.btoa(Array.from(window.crypto.getRandomValues(new Uint8Array(length * 2))).map((b) => String.fromCharCode(b)).join("")).replace(/[+/]/g, "").substring(0, length);
 }
