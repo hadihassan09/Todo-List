@@ -44,10 +44,10 @@ import generateUID from "../js/functions";
                     <h3>{this.props.title}</h3>
                 </div>
                 <div>
-                    <ul>
+                    <ul className="list-group">
                         {
                             this.state.tasks.map(task => (
-                                <li key={task.id} >{task.text}</li>
+                                <li className="list-group-item" key={task.id}>{task.text}</li>
                             ))
                         }
                     </ul>
