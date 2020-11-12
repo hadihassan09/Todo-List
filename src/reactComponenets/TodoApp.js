@@ -74,13 +74,16 @@ export default class TodoApp extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <input className="form-control" placeholder="Add A New List" type="text"  value={this.state.value} onChange={this.handleChange} />
-                        </div>
-                        <div className="form-group">
-                            <button className="btn btn-primary btn-submit btn-block">Submit</button>
+                <div style={{padding: 20, width: "98%"}}>
+                    <form  onSubmit={this.handleSubmit}>
+                        <div className="form-group row mb-2">
+                            <label className="h3 sm-2 col-form">Add a New List:</label>
+                            <div className="col-sm-8">
+                                <input className="form-control" placeholder="List Title" type="text"  value={this.state.value} onChange={this.handleChange} />
+                            </div>
+                            <div className="mb-2" style={{flex: '0 0 22%', 'max-width': '22%'}}>
+                                <button className="btn btn-primary btn-submit btn-block">Add List</button>
+                            </div>
                         </div>
                     </form>
                 </div>

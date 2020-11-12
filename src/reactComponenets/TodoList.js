@@ -60,37 +60,39 @@ import generateUID from "../js/functions";
     
     render() {
         return (
-            <div style={ {margin: 20, width: 300, 'max-height': 400, 'min-height':400, 'overflow-y': 'auto'} }>
-                <div style={{ textAlign: 'center', margin: 10 }}>
-                    <h3 className="h3">
-                        {this.props.title}
-                        <i  className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
-                            style={{float: 'right'}}
-                            onClick={this.props.onDelete}></i>
-                    </h3>
-                </div>
-                <div>
-                    <ul className="list-group">
-                        {
-                            this.state.tasks.map(task => (
-                                <li className="list-group-item" key={task.id}>
-                                    {task.text}
-                                    <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
-                                       onClick={()=>{ this.deleteTask(task) }}></i>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <input className="form-control" placeholder="Add A New Task" type="text"  value={this.state.value} onChange={this.handleChange} />
-                        </div>
-                        <div className="form-group">
-                            <button className="btn btn-primary btn-submit btn-block">Submit</button>
-                        </div>
-                    </form>
+            <div className="bg-white shadow rounded border" style={{margin: 20, width: 333}}>
+                <div style={ {margin: 'auto', width: 300, 'max-height': 456, 'min-height':456, 'overflow-y': 'auto'} }>
+                    <div style={{ textAlign: 'center', margin: 10 }}>
+                        <h3 className="h3">
+                            {this.props.title}
+                            <i  className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                style={{float: 'right'}}
+                                onClick={this.props.onDelete}></i>
+                        </h3>
+                    </div>
+                    <div>
+                        <ul className="list-group">
+                            {
+                                this.state.tasks.map(task => (
+                                    <li className="list-group-item" key={task.id}>
+                                        {task.text}
+                                        <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                           onClick={()=>{ this.deleteTask(task) }}></i>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <input className="form-control" placeholder="Add A New Task" type="text"  value={this.state.value} onChange={this.handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <button className="btn btn-primary btn-submit btn-block">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         );
