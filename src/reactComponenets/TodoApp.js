@@ -81,7 +81,7 @@ export default class TodoApp extends Component {
                             <div className="col-sm-8">
                                 <input className="form-control" placeholder="List Title" type="text"  value={this.state.value} onChange={this.handleChange} />
                             </div>
-                            <div className="mb-2" style={{flex: '0 0 22%', 'max-width': '22%'}}>
+                            <div className="col-sm-2 mb-2">
                                 <button className="btn btn-primary btn-submit btn-block">Add List</button>
                             </div>
                         </div>
