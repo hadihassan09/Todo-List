@@ -61,7 +61,7 @@ import generateUID from "../js/functions";
     render() {
         return (
             <div className="bg-white shadow rounded border" style={{margin: 20, width: 333}}>
-                <div style={ {margin: 'auto', width: 300, manHeight: 456, minHeight:456, overflowY: 'auto'} }>
+                <div style={ {margin: 'auto', width: 300, maxHeight: 456, minHeight:456, overflowY: 'auto'} }>
                     <div style={{ textAlign: 'center', margin: 10 }}>
                         <h3 className="h3">
                             {this.props.title}
