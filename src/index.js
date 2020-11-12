@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import TodoList from './reactComponenets/TodoList'
 import reportWebVitals from './reportWebVitals';
+import TodoApp from "./reactComponenets/TodoApp";
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <TodoList title="Fist Todo App"/>
+      <TodoApp />{/* //title=" My First List" id="list1"*/}
   </React.StrictMode>,
   document.getElementById('root')
 );

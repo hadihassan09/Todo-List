@@ -4,13 +4,34 @@ import generateUID from "../js/functions";
     constructor(props) {
         super(props);
 
+
         this.state = {
-            tasks:[],
+            tasks: this.getFromLocalStorage(),
             value: ''
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
+    }
+
+    deleteTask(task){
+        let index = this.state.tasks.indexOf(task);
+        let oldTasks = this.state.tasks.slice();
+        oldTasks.splice(index, 1);
+        this.setState({
+            tasks: oldTasks
+        }, ()=>{
+            this.updateInLocalStorage()
+        })
+    }
+
+    updateInLocalStorage(){
+        localStorage.setItem(this.props.id, JSON.stringify(this.state.tasks));
+    }
+
+    getFromLocalStorage(){
+        return JSON.parse(localStorage.getItem(this.props.id));
     }
 
     handleChange(event) {
@@ -26,28 +47,37 @@ import generateUID from "../js/functions";
             return;
         }
 
-        this.setState(state => ({
-            tasks: state.tasks.concat({
+        this.setState(({
+            tasks: this.state.tasks.concat({
                 id: generateUID(5),
                 text: value
             }),
             value: ''
         }), ()=>{
-            //localstorage
+            this.updateInLocalStorage()
         });
     }
     
     render() {
         return (
-            <div style={ {margin: 20} } className="w-25">
-                <div style={{ textAlign: 'center' }}>
-                    <h3>{this.props.title}</h3>
+            <div style={ {margin: 20, width: 300, 'max-height': 400, 'min-height':400, 'overflow-y': 'auto'} }>
+                <div style={{ textAlign: 'center', margin: 10 }}>
+                    <h3 className="h3">
+                        {this.props.title}
+                        <i  className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                            style={{float: 'right'}}
+                            onClick={this.props.onDelete}></i>
+                    </h3>
                 </div>
                 <div>
                     <ul className="list-group">
                         {
                             this.state.tasks.map(task => (
-                                <li className="list-group-item" key={task.id}>{task.text}</li>
+                                <li className="list-group-item" key={task.id}>
+                                    {task.text}
+                                    <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                       onClick={()=>{ this.deleteTask(task) }}></i>
+                                </li>
                             ))
                         }
                     </ul>
