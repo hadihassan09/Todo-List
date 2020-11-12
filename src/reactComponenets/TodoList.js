@@ -26,6 +26,45 @@ import generateUID from "../js/functions";
         })
     }
 
+     onDragEnd = (ev, task)=>{
+         let flag = JSON.parse(localStorage.getItem("flag"));
+         if(flag === 1) {
+             let index = this.state.tasks.indexOf(task.task);
+             let oldTasks = this.state.tasks.slice();
+             oldTasks.splice(index, 1);
+             this.setState({
+                 tasks: oldTasks
+             }, () => {
+                 this.updateInLocalStorage()
+             })
+         }
+     }
+
+
+     onDragStart = (ev, task) => {
+         ev.dataTransfer.setData("task", JSON.stringify(task));
+     }
+
+     onDragOver = (ev) => {
+         ev.preventDefault();
+     }
+
+     onDrop = (ev) => {
+         let task = JSON.parse(ev.dataTransfer.getData("task"));
+
+         if(this.props.id !== task.listId) {
+             localStorage.setItem("flag", JSON.stringify(1));
+             this.setState(({
+                 tasks: this.state.tasks.concat(task.task),
+                 value: this.state.value
+             }), () => {
+                 this.updateInLocalStorage();
+             });
+         }else{
+             localStorage.setItem("flag", JSON.stringify(0));
+         }
+     }
+
     updateInLocalStorage(){
         localStorage.setItem(this.props.id, JSON.stringify(this.state.tasks));
     }
@@ -60,7 +99,9 @@ import generateUID from "../js/functions";
     
     render() {
         return (
-            <div className="bg-white shadow rounded border" style={{margin: 20, width: 333}}>
+            <div onDragOver={(e)=>this.onDragOver(e)}
+                 onDrop={(e)=>{this.onDrop(e)}}
+                 className="bg-white shadow rounded border" style={{margin: 20, width: 333}}>
                 <div style={ {margin: 'auto', width: 300, maxHeight: 456, minHeight:456, overflowY: 'auto'} }>
                     <div style={{ textAlign: 'center', margin: 10 }}>
                         <h3 className="h3">
@@ -74,11 +115,19 @@ import generateUID from "../js/functions";
                         <ul className="list-group">
                             {
                                 this.state.tasks.map(task => (
-                                    <li className="list-group-item" key={task.id}>
-                                        {task.text}
-                                        <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
-                                           onClick={()=>{ this.deleteTask(task) }}></i>
-                                    </li>
+                                    <div
+                                        key={task.id}
+                                        onDragStart = {(e) => this.onDragStart(e, {task: task, listId: this.props.id})}
+                                        onDragEnd={(e)=>{this.onDragEnd(e, {task: task, listId: this.props.id})}}
+
+                                        draggable
+                                        className="draggable">
+                                       <li className="list-group-item" key={task.id}>
+                                            {task.text}
+                                            <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                               onClick={()=>{ this.deleteTask(task) }}></i>
+                                        </li>
+                                    </div>
                                 ))
                             }
                         </ul>
