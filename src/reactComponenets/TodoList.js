@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import generateUID from "../js/functions";
+import ModalEditTask from "./Modal";
  export default class TodoList extends Component{
     constructor(props) {
         super(props);
@@ -7,13 +8,18 @@ import generateUID from "../js/functions";
 
         this.state = {
             tasks: this.getFromLocalStorage(),
-            value: ''
+            value: '',
+            show : false,
+            valueModal: '',
+            modalData: null
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
     }
+
+    // InsertDeleteFunctions
 
     deleteTask(task){
         let index = this.state.tasks.indexOf(task);
@@ -25,6 +31,40 @@ import generateUID from "../js/functions";
             this.updateInLocalStorage()
         })
     }
+
+     updateInLocalStorage(){
+         localStorage.setItem(this.props.id, JSON.stringify(this.state.tasks));
+     }
+
+     getFromLocalStorage(){
+         return JSON.parse(localStorage.getItem(this.props.id));
+     }
+
+     handleChange(event) {
+         this.setState({value: event.target.value});
+     }
+
+     handleSubmit(event) {
+         event.preventDefault();
+
+         let value = this.state.value;
+
+         if(value.length === 0){
+             return;
+         }
+
+         this.setState(({
+             tasks: this.state.tasks.concat({
+                 id: generateUID(5),
+                 text: value
+             }),
+             value: ''
+         }), ()=>{
+             this.updateInLocalStorage()
+         });
+     }
+
+     // DragAndDropFunctions
 
      onDragEnd = (ev, task)=>{
          let flag = JSON.parse(localStorage.getItem("flag"));
@@ -65,37 +105,55 @@ import generateUID from "../js/functions";
          }
      }
 
-    updateInLocalStorage(){
-        localStorage.setItem(this.props.id, JSON.stringify(this.state.tasks));
-    }
+     // Modal Functions
 
-    getFromLocalStorage(){
-        return JSON.parse(localStorage.getItem(this.props.id));
-    }
+     addModal(){
+        if(this.state.show === true)
+            return (
+             <ModalEditTask
+                 show={this.state.show}
+                 title={"Edit Task"}
+                 data={this.state.modalData}
+                 onClick={this.handleClose}
+                 onHide={this.handleClose}
+                 onSave={this.handleSave}/>
+            );
+        else return (
+            <>
+            </>
+        )
+     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-    
-    handleSubmit(event) {
-        event.preventDefault();
+     handleSave = (fromModal) => {
+         let tasks = this.state.tasks.slice();
+         tasks.forEach((task)=>{
+             if(task.id === fromModal.task.id){
+                 task.text=fromModal.task.text;
+             }
+         });
 
-        let value = this.state.value;
+         this.setState({
+             tasks: tasks,
+             show: false,
+             modalData: null
+         }, ()=>{
+             this.updateInLocalStorage();
+         });
+     }
 
-        if(value.length === 0){
-            return;
-        }
+     handleShow = (task) => {
+         this.setState({
+             show: true,
+             modalData: task
+         })
+     };
 
-        this.setState(({
-            tasks: this.state.tasks.concat({
-                id: generateUID(5),
-                text: value
-            }),
-            value: ''
-        }), ()=>{
-            this.updateInLocalStorage()
-        });
-    }
+     handleClose = () => {
+         this.setState({
+             show: false,
+             modalData: null
+         });
+     };
     
     render() {
         return (
@@ -126,6 +184,8 @@ import generateUID from "../js/functions";
                                             {task.text}
                                             <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
                                                onClick={()=>{ this.deleteTask(task) }}></i>
+                                           <i style={{float: 'right', marginRight: 5}} className="fas fa-edit text-blue-200 hover:text-blue-600 cursor-pointer"
+                                              onClick={() => this.handleShow(task)}></i>
                                         </li>
                                     </div>
                                 ))
@@ -143,6 +203,9 @@ import generateUID from "../js/functions";
                         </form>
                     </div>
                 </div>
+                {
+                    this.addModal()
+                }
             </div>
         );
     }
