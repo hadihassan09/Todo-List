@@ -6,9 +6,7 @@ import TodoApp from "./reactComponenets/TodoApp";
 
 
 ReactDOM.render(
-  <React.StrictMode>
-      <TodoApp />{/* //title=" My First List" id="list1"*/}
-  </React.StrictMode>,
+    <TodoApp />,
   document.getElementById('root')
 );
 
