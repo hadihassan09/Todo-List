@@ -17,6 +17,7 @@ import ModalEditTask from "./Modal";
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
+        this.checkTask = this.checkTask.bind(this);
     }
 
     // InsertDeleteFunctions
@@ -29,6 +30,20 @@ import ModalEditTask from "./Modal";
             tasks: oldTasks
         }, ()=>{
             this.updateInLocalStorage()
+        })
+    }
+
+    checkTask(taskCheck){
+        let tasks = this.state.tasks.slice();
+        tasks.forEach((task)=>{
+            if (task === taskCheck) {
+                task.checked = !taskCheck.checked;
+            }
+        });
+        this.setState({
+            tasks: tasks
+        }, ()=>{
+            this.updateInLocalStorage();
         })
     }
 
@@ -56,7 +71,8 @@ import ModalEditTask from "./Modal";
          this.setState(({
              tasks: this.state.tasks.concat({
                  id: generateUID(5),
-                 text: value
+                 text: value,
+                 checked: false
              }),
              value: ''
          }), ()=>{
@@ -177,16 +193,44 @@ import ModalEditTask from "./Modal";
                                         key={task.id}
                                         onDragStart = {(e) => this.onDragStart(e, {task: task, listId: this.props.id})}
                                         onDragEnd={(e)=>{this.onDragEnd(e, {task: task, listId: this.props.id})}}
-
                                         draggable
                                         className="draggable">
-                                       <li className="list-group-item" key={task.id}>
-                                            {task.text}
-                                            <i style={{float: 'right'}} className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
-                                               onClick={()=>{ this.deleteTask(task) }}></i>
-                                           <i style={{float: 'right', marginRight: 5}} className="fas fa-edit text-blue-200 hover:text-blue-600 cursor-pointer"
-                                              onClick={() => this.handleShow(task)}></i>
-                                        </li>
+
+                                            {(task.checked === true) ?
+                                                <li className="list-group-item" key={task.id}
+                                                    style={{textDecoration: 'line-through'}}>
+                                                    {task.text}
+                                                    <i style={{float: 'right'}}
+                                                       className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                                       onClick={() => {
+                                                           this.deleteTask(task)
+                                                       }}></i>
+                                                    <i style={{float: 'right', marginRight: 5}}
+                                                       className="fas fa-check text-green-200 hover:text-green-600 cursor-pointer"
+                                                       onClick={() => {
+                                                           this.checkTask(task)
+                                                       }}></i>
+                                                    <i style={{float: 'right', marginRight: 5}}
+                                                       className="fas fa-edit text-blue-200 hover:text-blue-600 cursor-pointer"
+                                                       onClick={() => this.handleShow(task)}></i>
+                                                </li> :
+                                                <li className="list-group-item" key={task.id}>
+                                                    {task.text}
+                                                    <i style={{float: 'right'}}
+                                                       className="fas fa-times text-red-200 hover:text-red-600 cursor-pointer"
+                                                       onClick={() => {
+                                                           this.deleteTask(task)
+                                                       }}></i>
+                                                    <i style={{float: 'right', marginRight: 5}}
+                                                       className="fas fa-check text-green-200 hover:text-green-600 cursor-pointer"
+                                                       onClick={() => {
+                                                           this.checkTask(task)
+                                                       }}></i>
+                                                    <i style={{float: 'right', marginRight: 5}}
+                                                       className="fas fa-edit text-blue-200 hover:text-blue-600 cursor-pointer"
+                                                       onClick={() => this.handleShow(task)}></i>
+                                                </li>
+                                            }
                                     </div>
                                 ))
                             }
